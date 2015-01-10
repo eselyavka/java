@@ -1,18 +1,3 @@
-/***********************************************************************************
- *
- * Copyright 2014 Yota Lab LLC, Russia
- * Copyright 2014 Seconca Holdings Limited, Cyprus
- *
- *  This source code is Yota Lab Confidential Proprietary
- *  This software is protected by copyright.  All rights and titles are reserved.
- *  You shall not use, copy, distribute, modify, decompile, disassemble or reverse
- *  engineer the software. Otherwise this violation would be treated by law and
- *  would be subject to legal prosecution.  Legal use of the software provides
- *  receipt of a license from the right holder only.
- *
- *
- ************************************************************************************/
-
 package tv.okko.devops.hbase;
 
 import java.io.IOException;
@@ -25,17 +10,9 @@ import org.apache.hadoop.hbase.ZooKeeperConnectionException;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.log4j.Logger;
 
-/**
- * HBase compaction.
- */
 public class HBaseCompaction {
     private static final Logger LOG = Logger.getLogger(HBaseCompaction.class.getName());
 
-    /**
-     * Main.
-     * @param args args
-     * @throws IOException on errors
-     */
     public static void main(String[] args) throws IOException {
         Configuration conf = HBaseConfiguration.create();
         HBaseAdmin hbase = null;
