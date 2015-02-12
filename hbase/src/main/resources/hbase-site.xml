@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+
+  <property>
+    <name>hbase.zookeeper.property.clientPort</name>
+    <value>2181</value>
+  </property>      
+  
+  <property>
+    <name>hbase.zookeeper.quorum</name>
+    <value>pre-hadoop-dn3.spb.play.dc</value>
+    <!--<value>pre-hadoop-dn1.spb.play.dc,pre-hadoop-dn2.spb.play.dc,pre-hadoop-dn3.spb.play.dc</value>-->
+  </property>
+  
+  <property>
+    <name>hbase.client.retries.number</name>
+    <value>1</value>
+  </property>
+
+  <property>
+    <name>zookeeper.session.timeout</name>
+    <value>10000</value>
+  </property>
+
+  <property>
+    <name>zookeeper.recovery.retry</name>
+    <value>1</value>
+  </property>
+
+</configuration>
