@@ -2,11 +2,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>tv.okko.devops.zookeeaper</groupId>
-  <artifactId>zookeeper-watcher</artifactId>
+  <artifactId>zookeeper-animal</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   
-  <name>zookeeper-watcher</name>
+  <name>zookeeper-animal</name>
   <url>http://maven.apache.org</url>
   
     <build>
@@ -35,7 +35,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <finalName>WatcherExample</finalName>
+              <finalName>ZooAnimal</finalName>
             </configuration>
           </execution>
         </executions>
@@ -48,7 +48,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <mainClass>tv.okko.devops.zookeeaper.WatcherExample</mainClass>
+              <mainClass>tv.okko.devops.zookeeaper.ZooAnimal</mainClass>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
               <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
             </manifest>
@@ -70,6 +70,20 @@
     <groupId>org.apache.zookeeper</groupId>
     <artifactId>zookeeper</artifactId>
     <version>3.4.5</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.sun.jmx</groupId>
+          <artifactId>jmxri</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.sun.jdmk</groupId>
+          <artifactId>jmxtools</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.jms</groupId>
+          <artifactId>jms</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 </project>
