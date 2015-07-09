@@ -3,6 +3,7 @@ package com.example.devops;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.*;
+import org.apache.log4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class ArchiveOperator {
     private final Options op;
     private final Path seqFile;
     private final Path opDir;
+    private static final Logger LOG = Logger.getLogger(ArchiveOperator.class.getName());
 
     public ArchiveOperator(Configuration conf, FileSystem fs, Options options) {
         this.conf = conf;
@@ -32,6 +34,7 @@ public class ArchiveOperator {
 
         if (!fs.isDirectory(opDir)) {
             message = "Directory " + fs.getUri() + "/" + opDir + " doesn't exists";
+            LOG.warn(message);
             throw new RuntimeException(message);
         }
 
@@ -40,11 +43,13 @@ public class ArchiveOperator {
 
         if (listedPath == null) {
             message = "No files found in " + fs.getUri() + "/" + opDir + ", by pattern '" + pattern + "' exiting...";
+            LOG.warn(message);
             throw new RuntimeException(message);
         }
 
         if (fs.isFile(seqFile)) {
             message = "File " + fs.getUri() + "/" + seqFile + " exists, please delete file";
+            LOG.warn(message);
             throw new RuntimeException(message);
         }
 
@@ -79,11 +84,13 @@ public class ArchiveOperator {
 
         if (!fs.isFile(seqFile)) {
             message = "File " + fs.getUri() + "/" + seqFile + " doesn't exists";
+            LOG.warn(message);
             throw new RuntimeException(message);
         }
 
         if (fs.listStatus(opDir).length != 0) {
             message = "Directory " + fs.getUri() + "/" + opDir + " is not empty";
+            LOG.warn(message);
             throw new RuntimeException(message);
         }
 

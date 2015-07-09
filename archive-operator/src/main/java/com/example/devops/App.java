@@ -3,6 +3,7 @@ package com.example.devops;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.util.GenericOptionsParser;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
@@ -10,6 +11,8 @@ import java.io.IOException;
  * Created by eseliavka on 03.07.15.
  */
 public class App {
+    private static final Logger LOG = Logger.getLogger(App.class.getName());
+
     public static void main(String[] args) throws IOException {
         Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
@@ -28,12 +31,9 @@ public class App {
                 default:
                     throw new RuntimeException("Unknown behavior");
             }
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            e.getMessage();
-            System.exit(1);
         } catch (Exception e) {
             e.printStackTrace();
+            LOG.error(e.getMessage());
             System.exit(1);
         }
     }
@@ -45,6 +45,7 @@ public class App {
         } catch (Exception e)
         {
             e.printStackTrace();
+            LOG.error(e.getMessage());
             System.exit(100);
         }
         return "Version: " + version.getVERSION() + "\nUsage: --toSeq/--fromSeq <sequenceFile> <operateDir>";
@@ -76,12 +77,9 @@ public class App {
             System.err.println("Operation [" + otherArgs[0] + "] is no supported");
             System.err.println(App.help());
             System.exit(1);
-        } catch (NullPointerException npe) {
-            npe.printStackTrace();
-            npe.getMessage();
-            System.exit(1);
         } catch (Exception e) {
             e.printStackTrace();
+            LOG.error(e.getMessage());
             System.exit(1);
         }
         return operation;
