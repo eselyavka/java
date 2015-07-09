@@ -14,6 +14,8 @@ import com.citrix.netscaler.nitro.resource.config.basic.server.gracefulEnum;
 import com.citrix.netscaler.nitro.resource.config.basic.service;
 import com.citrix.netscaler.nitro.resource.config.basic.service.monitor_stateEnum;
 import com.citrix.netscaler.nitro.service.nitro_service;
+import com.citrix.netscaler.nitro.resource.stat.ha.hanode_stats;
+import com.citrix.netscaler.nitro.resource.config.ha.hanode.stateEnum;
 
 public class ServiceManager {
 
@@ -25,6 +27,21 @@ public class ServiceManager {
     public ServiceManager(Options options) throws nitro_exception {
         this.options = options;
         this.nitro = new nitro_service(options.getIp(), "HTTP");
+        String haStatus = null;
+        try {
+            haStatus = hanode_stats.get(nitro).get_hacurmasterstate();
+            if (!haStatus.equals(stateEnum.Primary)) {
+                String message = "Server " + options.getIp() + " is not a primary node";
+                LOG.warn(message);
+                throw new RuntimeException(message);
+            }
+        } catch (Exception e) {
+            if (haStatus != null) {
+                String message = "Can't determinate ns status is HA setup, current status: " + haStatus;
+                LOG.error(message);
+            }
+            throw new RuntimeException(e);
+        }
     }
 
     public void disableService() throws Exception {
