@@ -33,7 +33,7 @@ public class App {
     private static Options parseArgs(String[] args) {
         if (args.length != 6) {
             VersionClass version = new VersionClass();
-            System.err.println("Version: " + version.getVersion() + "\nUsage: ns-manager <ip> <username> <password> <servername> <port> <action>");
+            System.err.println("Version: " + version.getVersion() + "\nUsage: ns-manager <ip,ip2,...ipn> <username> <password> <servername> <port> <action>");
             System.exit(2);
         }
 
