@@ -7,6 +7,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 
 /**
  * Created by eseliavka on 23.07.15.
@@ -20,6 +21,6 @@ public class GeoMapper
             throws IOException, InterruptedException {
         String[] fields = value.toString().split("\t");
         String fileName = ((FileSplit) context.getInputSplit()).getPath().getName();
-        context.write(new Text(fields[0]), one);
+        context.write(new Text(URLDecoder.decode(fields[0])), one);
     }
 }
