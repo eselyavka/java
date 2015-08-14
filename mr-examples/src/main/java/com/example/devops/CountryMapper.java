@@ -12,10 +12,31 @@ import java.io.IOException;
  */
 public class CountryMapper
         extends Mapper<LongWritable, Text, DBOutputWritable, NullWritable> {
+    private static final Double zero = new Double(0);
+    private static final String none = "none";
+
     @Override
     public void map(LongWritable key, Text value, Context context)
             throws IOException, InterruptedException {
         String[] fields = value.toString().split("\t");
-        context.write(new DBOutputWritable(fields[1],Double.parseDouble(fields[4]),Double.parseDouble(fields[5]),fields[8]), NullWritable.get());
+
+        Double latitude = zero;
+        Double longtitude = zero;
+        String name = none;
+        String cc = none;
+
+        if (fields.length >= 8) {
+            name = fields[1];
+            latitude = Double.parseDouble(fields[4]);
+            longtitude = Double.parseDouble(fields[5]);
+            cc = fields[8];
+        }
+        try {
+            context.write(new DBOutputWritable(name, latitude, longtitude, cc), NullWritable.get());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

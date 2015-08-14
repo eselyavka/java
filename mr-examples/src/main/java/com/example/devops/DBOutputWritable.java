@@ -26,6 +26,7 @@ public class DBOutputWritable implements Writable, DBWritable {
         this.cc = cc;
     }
 
+    @Override
     public void readFields(DataInput in) throws IOException {
         name = in.readUTF();
         latitude = in.readDouble();
@@ -33,6 +34,7 @@ public class DBOutputWritable implements Writable, DBWritable {
         cc = in.readUTF();
     }
 
+    @Override
     public void readFields(ResultSet rs) throws SQLException {
         name = rs.getString(1);
         latitude = rs.getDouble(2);
@@ -40,6 +42,7 @@ public class DBOutputWritable implements Writable, DBWritable {
         cc = rs.getString(4);
     }
 
+    @Override
     public void write(DataOutput out) throws IOException {
         out.writeUTF(name);
         out.writeDouble(latitude);
@@ -47,26 +50,11 @@ public class DBOutputWritable implements Writable, DBWritable {
         out.writeUTF(cc);
     }
 
+    @Override
     public void write(PreparedStatement ps) throws SQLException {
         ps.setString(1, name);
         ps.setDouble(2, latitude);
         ps.setDouble(3, longtitude);
         ps.setString(4, cc);
-    }
-
-    public Double getLatitude() {
-        return latitude;
-    }
-
-    public Double getLongtitude() {
-        return longtitude;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getCc() {
-        return cc;
     }
 }

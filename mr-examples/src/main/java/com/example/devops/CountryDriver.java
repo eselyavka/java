@@ -1,20 +1,17 @@
 package com.example.devops;
 
 import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.lib.db.DBOutputFormat;
+import org.apache.hadoop.mapred.lib.db.DBInputFormat;
+import org.apache.hadoop.mapreduce.lib.db.DBOutputFormat;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.db.DBConfiguration;
+import org.apache.hadoop.mapreduce.lib.db.DBRecordReader;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-
-import java.net.URI;
 
 /**
  * Created by eseliavka on 06.08.15.
@@ -32,28 +29,30 @@ public class CountryDriver extends Configured implements Tool {
         Job job = new Job(getConf(), "CountryDriver");
         job.setJarByClass(getClass());
 
-        DBConfiguration.configureDB(getConf(),
-                "org.postgresql.Driver",
-                "jdbc:postgresql://test-fw-deploy:5432/geo",
-                "geo",
-                "geo");
-
-        //DistributedCache.addFileToClassPath(new Path("/tmp/postgresql-9.3-1103.jdbc41.jar"), job.getConfiguration());
-//        job.addFileToClassPath(new Path("file:///tmp/postgresql-9.3-1103.jdbc41.jar"));
-//        job.addArchiveToClassPath(new Path("/tmp/postgresql-9.3-1103.jdbc41.jar"));
+        job.addArchiveToClassPath(new Path("/tmp/postgresql-9.3-1103.jdbc41.jar"));
 
         FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
         job.setMapperClass(CountryMapper.class);
         job.setNumReduceTasks(0);
 
+        job.setMapOutputKeyClass(DBOutputWritable.class);
+        job.setMapOutputValueClass(NullWritable.class);
+
         job.setOutputKeyClass(DBOutputWritable.class);
         job.setOutputValueClass(NullWritable.class);
 
-        job.setOutputKeyClass(DBOutputWritable.class);
+        job.setInputFormatClass(TextInputFormat.class);
+        job.setOutputFormatClass(DBOutputFormat.class);
 
-        DBOutputFormat.setOutput(job, "test", new String[]{"name", "latitude", "longtitude"});
+
+        DBOutputFormat.setOutput(job, "test", new String[]{"name", "latitude", "longtitude", "cc"});
+
+        DBConfiguration.configureDB(job.getConfiguration(),
+                "org.postgresql.Driver",
+                "jdbc:postgresql://test-fw-deploy:5432/geo",
+                "geo",
+                "geo");
 
         return job.waitForCompletion(true) ? 0 : 1;
     }
