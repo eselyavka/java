@@ -8,7 +8,7 @@ import org.apache.hadoop.io.Writable;
  * Created by eseliavka on 30.07.15.
  */
 
-class MyArrayWritable extends ArrayWritable {
+public class MyArrayWritable extends ArrayWritable {
 
     public MyArrayWritable(Class<? extends Writable> valueClass, Writable[] values) {
         super(valueClass, values);
