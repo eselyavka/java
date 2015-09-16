@@ -25,6 +25,11 @@ public class UrlRequesterExecutor {
     }
 
     public static void main(String args[]) throws InterruptedException {
+        if (args.length != 1) {
+            System.out.println("Please specify path to file as parameter");
+            System.exit(1);
+        }
+        String filename = args[0];
         UrlRequester[] UrlRequester = new UrlRequester[THREAD_NUMBER];
         BufferedReader br = null;
         List<String> urls = new ArrayList<String>();
@@ -32,7 +37,7 @@ public class UrlRequesterExecutor {
 
             String sCurrentLine;
 
-            br = new BufferedReader(new FileReader("/tmp/urllist.txt"));
+            br = new BufferedReader(new FileReader(filename));
 
             while ((sCurrentLine = br.readLine()) != null) {
                 try {
