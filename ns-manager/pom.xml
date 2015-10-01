@@ -10,7 +10,7 @@
 
   <groupId>tv.okko.devops.ns</groupId>
   <artifactId>ns-manager</artifactId>
-  <version>1.1</version>
+  <version>1.2</version>
   <packaging>jar</packaging>
 
   <name>ns-manager</name>

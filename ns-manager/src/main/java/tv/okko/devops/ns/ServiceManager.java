@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
 
@@ -87,7 +88,7 @@ public class ServiceManager {
                 break;
             } else if (System.currentTimeMillis() - time > MAX_AWAIT_TIME) {
                 LOG.debug("Service " + srv.get_name() + " status undefined due to a timeout");
-                break;
+                throw new AwaitTimeExhausted("Service " + srv.get_name() + " status undefined due to a timeout");
             } else {
                 TimeUnit.SECONDS.sleep(1);
             }
