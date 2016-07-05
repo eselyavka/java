@@ -4,20 +4,17 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
-import org.apache.hadoop.security.UserGroupInformation;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Scanner;
 
 public class MultipleOutputReducer
         extends Reducer<Text, LongWritable, Text, LongWritable> {
     MultipleOutputs<Text, LongWritable> mos;
 
-    ArrayList<String> reports = new ArrayList<String>();
+    private static ArrayList<String> reports = new ArrayList<String>();
+    private static ArrayList<String> drvInputs = new ArrayList<String>();
 
     public ArrayList<String> parse_report_file(File fn) {
         ArrayList<String> list = new ArrayList<String>();
@@ -33,23 +30,39 @@ public class MultipleOutputReducer
         return list;
     }
 
-    ArrayList generateFileName(Context context) {
-        ArrayList<String> inputs = new ArrayList<String>();
-        for (String i : context.getConfiguration().get("mapreduce.input.multipleinputs.dir.mappers").split(",")) {
-            inputs.add(i.split(";")[0]);
+    public void set_inputs(File fn) {
+        try {
+            FileInputStream fis = new FileInputStream(fn);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            drvInputs = (ArrayList) ois.readObject();
+            ois.close();
+            fis.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return;
+        } catch (ClassNotFoundException c) {
+            c.printStackTrace();
+            return;
         }
-        return inputs;
     }
 
-    public String generateOuputDirectory(String output, String report) throws IOException {
-        return "/user/" + UserGroupInformation.getCurrentUser().getUserName() + "/" + output + "/" + report + "/";
+    public String new_generateOuputDirectory(String r) throws IOException {
+        if (drvInputs.size() > 0) {
+            for (String input : drvInputs) {
+                if (input.toLowerCase().contains("/" + r.toLowerCase() + "/")) {
+                    return new File(new File(input).getParent()).getParent();
+                }
+            }
+        }
+        return null;
     }
 
     @Override
     public void setup(Context context) {
         mos = new MultipleOutputs(context);
-        File f = new File("cfg");
-        reports = parse_report_file(f);
+        File[] f = {new File("cfg"), new File("in")};
+        reports = parse_report_file(f[0]);
+        set_inputs(f[1]);
     }
 
     @Override
@@ -58,19 +71,18 @@ public class MultipleOutputReducer
 
         Long total = 0L;
         String[] report = key.toString().split("\t");
-        ArrayList<String> outputs = generateFileName(context);
-        Iterator<String> iterator = outputs.iterator();
         String output;
-
 
         while (values.iterator().hasNext()) {
             total = total + values.iterator().next().get();
         }
 
-        while (iterator.hasNext()) {
-            output = new File(iterator.next()).getParent();
-            if (reports.contains(report[0]) && output.contains(report[0])) {
-                mos.write(new Text(report[1]), new LongWritable(total), generateOuputDirectory(output, report[0]) + "/part");
+        if (reports.contains(report[0])) {
+            output = new_generateOuputDirectory(report[0]);
+            if (output != null) {
+                mos.write(new Text(report[1]), new LongWritable(total), output + "/data_todo." + context.getConfiguration().get("jobUUID") + "/part");
+            } else {
+                context.write(new Text(report[1]), new LongWritable(total));
             }
         }
     }
