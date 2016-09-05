@@ -6,12 +6,17 @@ import org.apache.hadoop.fs.Path;
 
 import java.io.IOException;
 
-/**
- * Created by eseliavka on 7/6/16.
- */
 public class HdfsHelper {
     private Configuration conf;
     private FileSystem fs;
+
+    public void setConf(Configuration conf) {
+        this.conf = conf;
+    }
+
+    public void setFs(FileSystem fs) {
+        this.fs = fs;
+    }
 
     public HdfsHelper() throws IOException {
         conf = new Configuration();
