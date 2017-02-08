@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet author="eseliavka" id="changeset-2.1" dbms="PostgreSQL">
+            <createTable remarks="Table for APP server"
+                         tableName="requests">
+                <column name="ip" type="inet"/>
+                <column name="user" type="text"/>
+                <column name="request_recieved" type="timestamp"/>
+                <column name="uri" type="text"/>
+                <column name="rc" type="smallint"/>
+                <column name="size" type="int"/>
+    </createTable>
+    </changeSet>
+</databaseChangeLog>

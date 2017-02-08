@@ -9,4 +9,5 @@
     <include file="com/example/devops/db/changelog/db.changeset-1.0.xml"/>
     <include file="com/example/devops/db/changelog/db.changeset-1.1.xml"/>
     <include file="com/example/devops/db/changelog/db.changeset-2.0.xml"/>
+    <include file="com/example/devops/db/changelog/db.changeset-2.1.xml"/>
 </databaseChangeLog>
