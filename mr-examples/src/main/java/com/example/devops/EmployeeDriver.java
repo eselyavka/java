@@ -3,6 +3,7 @@ package com.example.devops;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -26,6 +27,7 @@ public class EmployeeDriver extends Configured implements Tool {
 
     @Override
     public int run(String[] args) throws Exception {
+
         if (args.length != 2) {
             System.err.printf("Usage: %s [generic options] <input> <output>\n",
                     getClass().getSimpleName());
@@ -42,13 +44,14 @@ public class EmployeeDriver extends Configured implements Tool {
         job.setMapperClass(EmployeeParquetMapper.class);
         job.setCombinerClass(EmployeeParquetCombiner.class);
         job.setReducerClass(EmployeeParquetReducer.class);
+
         job.setNumReduceTasks(1);
 
         job.setMapOutputKeyClass(IntWritable.class);
         job.setMapOutputValueClass(EmployeeCompositeDepSalaryWritable.class);
 
         job.setOutputKeyClass(IntWritable.class);
-        job.setOutputValueClass(IntWritable.class);
+        job.setOutputValueClass(NullWritable.class);
 
         job.setInputFormatClass(ExampleInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
