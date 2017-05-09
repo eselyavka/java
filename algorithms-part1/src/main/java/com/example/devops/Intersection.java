@@ -25,12 +25,22 @@ public class Intersection {
 
         insertionSort(a);
         insertionSort(b);
+        assert isSorted(a) && isSorted(b);
     }
 
     public static void main(String[] args) {
         Intersection intersection = new Intersection();
-        System.out.println(intersection.intersection());
+        assert intersection.intersection() >= 2;
 
+    }
+
+    private boolean isSorted(Point[] arr) {
+        for (int i = 1; i < N; i++) {
+            if (less(arr[i], arr[i - 1])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public int getN() {
