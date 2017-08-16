@@ -1,6 +1,5 @@
-package com.example.devops;
+package com.example.devops.problem146;
 
-import com.example.devops.problem146.LRUCache;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -22,5 +21,4 @@ public class LRUCacheTest {
         assertEquals(lruCache.get(4), 10);
         assertEquals(lruCache.get(3), 3);
     }
-
 }
