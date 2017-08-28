@@ -1,4 +1,4 @@
-package com.example.devops;
+package com.example.devops.week2;
 
 import java.util.Iterator;
 

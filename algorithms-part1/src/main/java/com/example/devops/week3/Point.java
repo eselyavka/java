@@ -1,4 +1,4 @@
-package com.example.devops;
+package com.example.devops.week3;
 
 import edu.princeton.cs.algs4.StdDraw;
 

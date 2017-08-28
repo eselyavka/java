@@ -1,4 +1,6 @@
-package com.example.devops;
+package com.example.devops.week3;
+
+import com.example.devops.week3.Point;
 
 public class LineSegment {
     private final Point p;

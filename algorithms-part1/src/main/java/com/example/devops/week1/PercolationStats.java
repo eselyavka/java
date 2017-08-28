@@ -1,4 +1,4 @@
-package com.example.devops;
+package com.example.devops.week1;
 
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;

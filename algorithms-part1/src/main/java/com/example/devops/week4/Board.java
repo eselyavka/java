@@ -1,4 +1,4 @@
-package com.example.devops;
+package com.example.devops.week4;
 
 import java.util.ArrayList;
 import java.util.List;
