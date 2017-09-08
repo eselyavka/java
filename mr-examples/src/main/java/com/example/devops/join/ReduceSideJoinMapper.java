@@ -1,4 +1,4 @@
-package com.example.devops;
+package com.example.devops.join;
 
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -9,24 +9,28 @@ import java.io.IOException;
 
 public class ReduceSideJoinMapper extends Mapper<LongWritable, Text, TaggedKey, Text> {
     private TaggedKey taggedKey = new TaggedKey();
-    private Text fileName = new Text();
+    private String[] joinOrderAndIndex;
+    private int joinOrder;
+    private int idx;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
         FileSplit fileSplit = (FileSplit) context.getInputSplit();
-        fileName.set(fileSplit.getPath().getName());
-        System.out.println("filename:" + fileName.toString());
+        joinOrderAndIndex = context.getConfiguration().get(fileSplit.getPath().getName()).split(",");
+        joinOrder = Integer.parseInt(joinOrderAndIndex[0]);
+        idx = Integer.parseInt(joinOrderAndIndex[1]);
     }
 
     @Override
     protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         String[] tokens = value.toString().split(",");
-        String payload = null;
-        for (int i=1; i<tokens.length; i++) {
-            payload += tokens[i] + ",";
+        StringBuilder payload = new StringBuilder();
+        for (int i = 0; i < tokens.length; i++) {
+            if (i == idx) continue;
+            payload.append(tokens[i]).append(",");
         }
-        taggedKey.set(new Text(tokens[0]), fileName);
-        System.out.println("setting:" + taggedKey.getJoinKey().toString() + "|" + taggedKey.getTag().toString());
-        context.write(taggedKey, new Text(payload));
+        payload.setLength(payload.length() - 1);
+        taggedKey.set(new Text(tokens[idx]), joinOrder);
+        context.write(taggedKey, new Text(payload.toString()));
     }
 }

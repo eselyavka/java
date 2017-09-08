@@ -1,4 +1,4 @@
-package com.example.devops;
+package com.example.devops.join;
 
 import org.apache.hadoop.io.*;
 
@@ -8,11 +8,11 @@ import java.io.IOException;
 
 public class TaggedKey implements Writable, WritableComparable<TaggedKey> {
     private Text joinKey;
-    private Text tag;
+    private IntWritable tag;
 
     public TaggedKey() {
         this.joinKey = new Text();
-        this.tag = new Text();
+        this.tag = new IntWritable();
     }
 
     @Override
@@ -26,7 +26,8 @@ public class TaggedKey implements Writable, WritableComparable<TaggedKey> {
 
     @Override
     public void write(DataOutput dataOutput) throws IOException {
-        dataOutput.writeUTF(joinKey.toString() + "," + tag.toString());
+        joinKey.write(dataOutput);
+        tag.write(dataOutput);
     }
 
     @Override
@@ -39,19 +40,19 @@ public class TaggedKey implements Writable, WritableComparable<TaggedKey> {
         return joinKey;
     }
 
-    public Text getTag() {
+    public IntWritable getTag() {
         return tag;
     }
 
     public void setJoinKey(Text joinKey) {
-        this.joinKey = joinKey;
+        this.joinKey.set(joinKey);
     }
 
-    public void setTag(Text tag) {
-        this.tag = tag;
+    public void setTag(int tag) {
+        this.tag.set(tag);
     }
 
-    public void set(Text joinKey, Text tag) {
+    public void set(Text joinKey, int tag) {
         setJoinKey(joinKey);
         setTag(tag);
     }
